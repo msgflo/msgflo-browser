@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MicroFlo Simulator test</title>
+    <script src="/dist/msgflo.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <object id="arduino" type="image/svg+xml" data="./assets/controller_arduino_uno_r3.svg">No SVG support!</object>
+
+  <script type="text/javascript">
+  var setLed = function(On) {
+      var controller = document.getElementById("arduino").contentDocument;
+      var ledLight = controller.getElementById("pin13led-light");
+      ledLight.setAttributeNS(null, 'opacity', On ? '1' : '0');
+  }
+
+  var LedParticipant = function() {
+    var def = {
+      component: "FakeLed",
+      inports: [
+        { id: "in", type: "any" }
+      ], outports: [
+        { id: "out", type: "any" }
+      ]
+    }
+    var role = 'fakeled';
+
+    var process = function(inport, indata, callback) {
+      setLed(indata);
+      return callback('out', null, indata); 
+    }
+    var msgflo = window.msgflo;
+    var address = "mqtt://localhost";
+    var client = new msgflo.mqtt.Client(address, {});
+    return new msgflo.participant.Participant(client, def, process, role);
+  }
+
+  var onLoad = function() {
+    var msgflo = window.msgflo;
+
+    var p = LedParticipant();
+    p.start(function(err) {
+      console.log('started', err);
+    });
+
+  }
+  window.addEventListener('load', onLoad, false);
+  </script>
+  </body>
+
+</html>
