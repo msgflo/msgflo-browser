@@ -1,6 +1,6 @@
 
 debug = require 'debug'
-interfaces = require 'msgflo-nodejs/src/interfaces'
+interfaces = require 'msgflo-nodejs/src/interfaces.coffee'
 Paho = require 'paho.mqtt.js'
 url = require 'url'
 

@@ -1,2 +1,3 @@
 
-participant = require 'msgflo-nodejs/src/particpant'
+participant = require 'msgflo-nodejs/src/participant.coffee'
+module.exports = participant

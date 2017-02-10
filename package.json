@@ -2,7 +2,7 @@
   "name": "msgflo-browser",
   "version": "0.0.1",
   "description": "MsgFlo support for browser (clientside)",
-  "main": "dist/msgflo.js",
+  "main": "index.js",
   "directories": {
     "example": "examples"
   },
