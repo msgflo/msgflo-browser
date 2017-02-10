@@ -8,10 +8,9 @@ Easily create [MsgFlo](https://msgflo.org) participants running in the browser.
 
 ## Installing
 
-    # FIXME: publish on NPM
-    git clone...
-    npm install
-    npm run build
+Use NPM
+
+    npm install --save msgflo-browser
 
 ## Usage
 
