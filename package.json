@@ -12,9 +12,13 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "msgflo-nodejs": "^0.9.0"
+    "coffee-loader": "^0.7.2",
+    "coffee-script": "^1.12.3",
+    "msgflo-nodejs": "^0.9.0",
+    "webpack": "^2.2.1"
   },
   "dependencies": {
-    "debug": "^2.6.0"
+    "debug": "^2.6.0",
+    "paho.mqtt.js": "^2.0.4"
   }
 }
