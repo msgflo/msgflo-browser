@@ -1,19 +1,21 @@
 
 debug = require 'debug'
 interfaces = require 'msgflo-nodejs/src/interfaces'
+Paho = require 'paho.mqtt.js'
 
 class Client extends interfaces.MessagingClient
-  constructor: (address, options) ->
+  constructor: (address, options = {}) ->
     @address = address
     @options = options
+    @options.connectTimeout = 10 if not @options.connectTimeout
     @client = null 
     @subscribers = {} # queueName -> [handler1, ...]
 
-  _onConnectionLost = (responseObject) ->
+  _onConnectionLost: (responseObject) =>
     if responseObject.errorCode != 0
       console.log "onConnectionLost:"+responseObject.errorMessage
 
-  _onMessage = (message) ->
+  _onMessage: (message) =>
     debug 'onMessage', message
 
     return if not @client
@@ -36,18 +38,25 @@ class Client extends interfaces.MessagingClient
       handler out
 
   ## Broker connection management
-  connect: (callback) ->
+  connect: (callback) =>
     port = 1884
-    clientId = "msgflo-browser-foo" # TODO: randomize
-    @client = new Paho.MQTT.Client location.hostname, port, clientId
+    clientId = "msgflo-browser-foo2" # TODO: randomize
+    hostname = 'localhost'
+    @client = new Paho.Client hostname, port, clientId
     @client.onConnectionLost = @_onConnectionLost;
     @client.onMessageArrived = @_onMessage;
 
-    onConnected = () ->
+    onConnected = (response) ->
       return callback null
-    @client.connect onSuccess: onConnected     
+    onFailure = (response) ->
+      return callback new Error "Failed to connect to MQTT broker: #{response.errorCode} #{response.errorMessage}"
+    o =
+      onSuccess: onConnected
+      onFailure: onFailure
+      timeout: @options.connectTimeout
+    @client.connect o   
 
-  disconnect: (callback) ->
+  disconnect: (callback) =>
     @client = null
     @subscribers = {}
     return callback null
@@ -61,30 +70,31 @@ class Client extends interfaces.MessagingClient
     return callback null
 
   ## Sending/Receiving messages
-  sendTo: (type, topic, data, callback) ->
-    message = new Paho.MQTT.Message data
+  sendTo: (type, topic, value, callback) =>
+    data = JSON.stringify value
+    message = new Paho.Message data
     message.destinationName = topic
     @client.send message
     return callback null
 
-  subscribeToQueue: (queueName, handler, callback) ->
+  subscribeToQueue: (queueName, handler, callback) =>
     @subscribers[queueName] = [] if not @subscribers[queueName]
     @subscribers[queueName].push handler
     @client.subscribe queueName
     return callback null
 
   ## ACK/NACK messages
-  ackMessage: (message) -> # TODO: implement
+  ackMessage: (message) => # TODO: implement
     return callback null
-  nackMessage: (message) -> # TODO: implement
+  nackMessage: (message) => # TODO: implement
     return callback null
 
   # Participant registration
-  registerParticipant: (part, callback) ->
+  registerParticipant: (part, callback) =>
     msg =
       protocol: 'discovery'
       command: 'participant'
       payload: part
     @sendTo 'inqueue', 'fbp', msg, callback 
 
-module.export.Client = Client
+module.exports.Client = Client
