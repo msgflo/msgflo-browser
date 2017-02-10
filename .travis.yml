@@ -2,7 +2,7 @@ language: node_js
 services:
 - rabbitmq
 node_js:
-- 'stable'
+- stable
 before_install:
 - sudo apt-get update -qq
 - sudo apt-get install pkg-config cmake openssl libc-ares-dev
@@ -19,3 +19,11 @@ before_script:
 - npm install -g grunt-cli
 script:
 - npm test
+deploy:
+  provider: npm
+  email: jononor@gmail.com
+  api_key:
+    secure: Hvnuk4NZNa6Jen0g5cQqt2iJVLHeFcGTO07powcHc3PiYsCSOaFHPaV6H5oFd8iiD13lsjtJSxM2102kp8sUSI1XhE0mo0fKERONizB9pIpO6I3QMp/kKFE/FS/f2dbfyAgRXvwSKoYC18l1VGV+cax2HMBZs/0WnYfe1gIB/JwR3vVxUtOi9qK0Jhydgujv5YsW0sJgnhYupB6UB0i6ww0jPL6BTB1T8W3dIc83BZXMXHPMmsI+uNQIxss/z3feOv+dSxyjE8oXGScuUc0qzRtm9HEG0uO5Neq/MXQoW/O0mfG4AIZwx5Q3z4BP5R04oYweHiLt+zUD9DUziR6nORBdn0dcEfNkgIeGFtCEnxt5m+HwFZd/wz8J1m3CddDaGRs6XqSOmLumLKrDjifxCuhzoBwv7iTNKq7Gczo3ppm9eC4mlrC1fnpQUglzC7NhP9AO5seQkuaF6ihsxHnsoa3I11H+p0++Bec73cV6hXbhnFieVcQO3RaDf1oPWjeL6g94PisjVscyAlY854ujVqEvBF3ayLfbsWEEugbXpzZ6ir1MWMb3YmkFCfW1onWh418Za5AifKyPrFKJRLojgJ5SKI2IFtfqR0L/K/1KO9GJk03uGMhVlh3Iq+sQxfcjo3GKKaOGP8+uJ4r/Zqb63OeyISZCZo2ctjeLlGdBUgQ=
+  on:
+    tags: true
+    repo: msgflo/msgflo-browser
