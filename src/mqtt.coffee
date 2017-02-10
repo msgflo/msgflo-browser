@@ -2,6 +2,7 @@
 debug = require 'debug'
 interfaces = require 'msgflo-nodejs/src/interfaces'
 Paho = require 'paho.mqtt.js'
+url = require 'url'
 
 class Client extends interfaces.MessagingClient
   constructor: (address, options = {}) ->
@@ -17,16 +18,17 @@ class Client extends interfaces.MessagingClient
 
   _onMessage: (message) =>
     debug 'onMessage', message
-
     return if not @client
     return if not Object.keys(@subscribers).length > 0
 
+    topic = message.destinationName
+
     msg = null
     try
-      msg = JSON.parse message.toString()
+      msg = JSON.parse message.payloadString
     catch e
       debug 'failed to parse discovery message', e
-      msg = message.toString()
+      msg = message.payloadBuffer
     handlers = @subscribers[topic]
 
     debug 'message', handlers.length, msg != null
@@ -39,10 +41,11 @@ class Client extends interfaces.MessagingClient
 
   ## Broker connection management
   connect: (callback) =>
-    port = 1884
+    parsed = url.parse @address
+    parsed.port = 1884 if not parsed.port # one more than default MQTT, quite common Mosquitto config 
+    parsed.hostname = 'localhost' if not parsed.hostname
     clientId = "msgflo-browser-foo2" # TODO: randomize
-    hostname = 'localhost'
-    @client = new Paho.Client hostname, port, clientId
+    @client = new Paho.Client parsed.hostname, parsed.port, clientId
     @client.onConnectionLost = @_onConnectionLost;
     @client.onMessageArrived = @_onMessage;
 
@@ -85,9 +88,9 @@ class Client extends interfaces.MessagingClient
 
   ## ACK/NACK messages
   ackMessage: (message) => # TODO: implement
-    return callback null
+    return null
   nackMessage: (message) => # TODO: implement
-    return callback null
+    return null
 
   # Participant registration
   registerParticipant: (part, callback) =>
