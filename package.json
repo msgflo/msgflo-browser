@@ -10,5 +10,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "msgflo-nodejs": "^0.9.0"
+  },
+  "dependencies": {
+    "debug": "^2.6.0"
+  }
 }
