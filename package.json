@@ -19,7 +19,7 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
-    "debug": "^2.6.0",
+    "debug": "^2.6.6",
     "paho.mqtt.js": "^2.0.4"
   }
 }
