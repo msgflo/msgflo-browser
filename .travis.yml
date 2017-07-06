@@ -14,9 +14,11 @@ install:
 - sudo make install
 - cd ..
 - npm install
+- npm run build
 before_script:
 - mosquitto -d
-- npm install -g grunt-cli
+- './node_modules/.bin/simple-server . &'
+- './node_modules/.bin/phantomjs spec/phantom.js &'
 script:
 - npm test
 deploy:

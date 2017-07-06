@@ -7,15 +7,21 @@
     "example": "examples"
   },
   "scripts": {
-    "test": "npm run build",
+    "test": "fbp-spec --address ws://localhost:3569 --command './node_modules/.bin/msgflo --broker=mqtt://localhost' --start-timeout 60 spec/",
     "build": "webpack --config webpack.config.js"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "amqplib": "^0.5.1",
     "coffee-loader": "^0.7.2",
     "coffee-script": "^1.12.3",
+    "fbp-spec": "^0.2.1",
+    "mqtt": "^2.9.1",
+    "msgflo": "^0.10.26",
     "msgflo-nodejs": "^0.9.1",
+    "phantom": "^4.0.4",
+    "simple-server": "^1.0.1",
     "webpack": "^2.2.1"
   },
   "dependencies": {
