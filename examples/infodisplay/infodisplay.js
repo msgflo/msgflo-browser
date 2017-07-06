@@ -6,6 +6,7 @@ var urls = [
 var getRotationUrl = function () {
   return urls[Math.floor(Math.random() * urls.length)];
 };
+var timeout = null;
 
 var DisplayParticipant = function (broker, role) {
   var element = document.getElementById('iframe');
@@ -46,7 +47,10 @@ var DisplayParticipant = function (broker, role) {
     };
     element.setAttribute('src', indata);
     // Rotate internal URLs list
-    setTimeout(function () {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(function () {
       participant.send('open', getRotationUrl());
     }, 120000);
   };
