@@ -1,16 +1,23 @@
 {
   "name": "msgflo-browser",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "MsgFlo support for browser (clientside)",
   "main": "index.js",
   "directories": {
     "example": "examples"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/msgflo/msgflo-browser.git"
+  },
   "scripts": {
     "test": "fbp-spec --address ws://localhost:3569 --command './node_modules/.bin/msgflo --broker=mqtt://localhost' --start-timeout 60 spec/",
     "build": "webpack --config webpack.config.js"
   },
-  "author": "",
+  "author": {
+    "name": "Jon Nordby",
+    "email": "jononor@gmail.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "amqplib": "^0.5.1",
