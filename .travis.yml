@@ -12,7 +12,7 @@ before_install:
 install:
 - tar xzf mosquitto-1.4.11.tar.gz
 - cd mosquitto-1.4.11
-- cmake .
+- cmake -DWITH_WEBSOCKETS=ON .
 - sudo make install
 - cd ..
 - npm install
