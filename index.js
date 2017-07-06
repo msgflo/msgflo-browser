@@ -4,7 +4,7 @@ module.exports = {
   mqtt: require('./src/mqtt'),
   participant: require('./src/participant'),
   options: function (defaults) {
-    if (!defaults} {
+    if (!defaults) {
       defaults = {};
     }
     if (!defaults.broker) {
