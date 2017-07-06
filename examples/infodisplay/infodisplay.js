@@ -1,14 +1,7 @@
 var msgflo = window.msgflo;
 var urls = [
-    "http://c-beam.cbrp3.c-base.org/events",
-    "https://c-beam.cbrp3.c-base.org/c-base-map",
-    "https://c-beam.cbrp3.c-base.org/weather",
-    "http://c-beam.cbrp3.c-base.org/bvg",
-    "http://openmct.cbrp3.c-base.org/#/browse/mine/b358cd1c-7b59-4e84-9d8c-d1a584a9ef86",
-    "http://openmct.cbrp3.c-base.org/#/browse/mine/9f398f6a-5afc-4301-85f9-8d2bf03886a3",
-    "https://c-beam.cbrp3.c-base.org/sensors",
-    "https://c-beam.cbrp3.c-base.org/ceitloch",
-    "http://app.flowhub.io#runtime/endpoint?protocol%3Dwebsocket%26address%3Dws%3A%2F%2Fc-flo.cbrp3.c-base.org%3A3569%26id%3Da9dca883-c07f-4cd7-b369-180fa9b52b68",
+    "https://msgflo.org",
+    "https://flowhub.io/iot/"
 ];
 var getRotationUrl = function () {
   return urls[Math.floor(Math.random() * urls.length)];
