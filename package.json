@@ -31,7 +31,7 @@
   },
   "msgflo": {
     "components": {
-      "msgflo-browser/infodisplay": "node ./node_modules/.bin/phantomjs spec/phantom.js"
+      "msgflo-browser/infodisplay": "node ./node_modules/.bin/phantomjs spec/utils/phantom.js"
     }
   }
 }
