@@ -42,7 +42,10 @@ class Client extends interfaces.MessagingClient
   ## Broker connection management
   connect: (callback) =>
     parsed = url.parse @address
-    parsed.port = 1884 if not parsed.port # one more than default MQTT, quite common Mosquitto config 
+    if parsed.port
+      parsed.port = parseInt parsed.port
+    else
+      parsed.port = 1884 # one more than default MQTT, quite common Mosquitto config
     parsed.hostname = 'localhost' if not parsed.hostname
     clientId = "msgflo-browser-foo2" # TODO: randomize
     @client = new Paho.Client parsed.hostname, parsed.port, clientId
