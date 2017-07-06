@@ -1,0 +1,18 @@
+name: 'Info display running in browser'
+topic: msgflo-browser/infodisplay
+fixture:
+  type: 'fbp'
+  data: |
+    INPORT=display.SHOW:IN
+    OUTPORT=display.SHOWED:OUT
+    display(msgflo-browser/infodisplay)
+cases:
+-
+  name: 'receiving a URL to show'
+  assertion: 'should show it'
+  inputs:
+    in: 'http://app.flowhub.io/'
+  expect:
+    out:
+      -
+        equals: 'http://app.flowhub.io/'

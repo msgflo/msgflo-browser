@@ -3,6 +3,7 @@ debug = require 'debug'
 interfaces = require 'msgflo-nodejs/src/interfaces.coffee'
 Paho = require 'paho.mqtt.js'
 url = require 'url'
+uuid = require 'uuid'
 
 class Client extends interfaces.MessagingClient
   constructor: (address, options = {}) ->
@@ -28,7 +29,7 @@ class Client extends interfaces.MessagingClient
       msg = JSON.parse message.payloadString
     catch e
       debug 'failed to parse discovery message', e
-      msg = message.payloadBuffer
+      msg = message.payloadBuffer or message.payloadString
     handlers = @subscribers[topic]
 
     debug 'message', handlers.length, msg != null
@@ -42,9 +43,12 @@ class Client extends interfaces.MessagingClient
   ## Broker connection management
   connect: (callback) =>
     parsed = url.parse @address
-    parsed.port = 1884 if not parsed.port # one more than default MQTT, quite common Mosquitto config 
+    if parsed.port
+      parsed.port = parseInt parsed.port
+    else
+      parsed.port = 1884 # one more than default MQTT, quite common Mosquitto config
     parsed.hostname = 'localhost' if not parsed.hostname
-    clientId = "msgflo-browser-foo2" # TODO: randomize
+    clientId = "msgflo-browser-#{uuid.v4()}"
     @client = new Paho.Client parsed.hostname, parsed.port, clientId
     @client.onConnectionLost = @_onConnectionLost;
     @client.onMessageArrived = @_onMessage;

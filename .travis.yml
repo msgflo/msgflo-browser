@@ -1,3 +1,5 @@
+dist: trusty
+sudo: true
 language: node_js
 services:
 - rabbitmq
@@ -5,18 +7,19 @@ node_js:
 - stable
 before_install:
 - sudo apt-get update -qq
-- sudo apt-get install pkg-config cmake openssl libc-ares-dev
-- wget http://mosquitto.org/files/source/mosquitto-1.3.1.tar.gz
+- sudo apt-get install pkg-config cmake openssl libc-ares-dev libwebsockets-dev
+- wget http://mosquitto.org/files/source/mosquitto-1.4.11.tar.gz
 install:
-- tar xzf mosquitto-1.3.1.tar.gz
-- cd mosquitto-1.3.1
-- cmake .
+- tar xzf mosquitto-1.4.11.tar.gz
+- cd mosquitto-1.4.11
+- cmake -DWITH_WEBSOCKETS=ON .
 - sudo make install
 - cd ..
 - npm install
+- npm run build
 before_script:
-- mosquitto -d
-- npm install -g grunt-cli
+- mosquitto -c spec/utils/mosquitto.conf -d
+- './node_modules/.bin/simple-server . &'
 script:
 - npm test
 deploy:
