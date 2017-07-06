@@ -3,8 +3,8 @@ topic: msgflo-browser/infodisplay
 fixture:
   type: 'fbp'
   data: |
-    INPORT=display.SHOW:IN
-    OUTPORT=display.SHOWED:OUT
+    INPORT=display.OPEN:IN
+    OUTPORT=display.OPENED:OUT
     display(msgflo-browser/infodisplay)
 cases:
 -
