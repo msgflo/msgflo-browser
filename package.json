@@ -27,5 +27,10 @@
   "dependencies": {
     "debug": "^2.6.0",
     "paho.mqtt.js": "^2.0.4"
+  },
+  "msgflo": {
+    "components": {
+      "msgflo-browser/infodisplay": "node ./node_modules/.bin/phantomjs spec/phantom.js"
+    }
   }
 }
