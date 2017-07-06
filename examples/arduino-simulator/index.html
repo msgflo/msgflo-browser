@@ -15,9 +15,10 @@
       ledLight.setAttributeNS(null, 'opacity', On ? '1' : '0');
   }
 
-  var LedParticipant = function() {
+  var LedParticipant = function(broker, role) {
     var def = {
       component: "FakeLed",
+      icon: 'lightbulb-o',
       inports: [
         { id: "in", type: "any" }
       ], outports: [
@@ -31,15 +32,17 @@
       return callback('out', null, indata); 
     }
     var msgflo = window.msgflo;
-    var address = "mqtt://localhost";
-    var client = new msgflo.mqtt.Client(address, {});
+    var client = new msgflo.mqtt.Client(broker, {});
     return new msgflo.participant.Participant(client, def, process, role);
   }
 
   var onLoad = function() {
     var msgflo = window.msgflo;
-
-    var p = LedParticipant();
+    var params = msgflo.options({
+      broker: 'mqtt://localhost',
+      role: 'fakeled'
+    });
+    var p = LedParticipant(params.broker, params.role);
     p.start(function(err) {
       console.log('started', err);
     });
