@@ -28,7 +28,7 @@ class Client extends interfaces.MessagingClient
       msg = JSON.parse message.payloadString
     catch e
       debug 'failed to parse discovery message', e
-      msg = message.payloadBuffer
+      msg = message.payloadBuffer or message.payloadString
     handlers = @subscribers[topic]
 
     debug 'message', handlers.length, msg != null
