@@ -18,8 +18,10 @@ var DisplayParticipant = function (broker, role) {
   };
   var process = function (inport, indata, callback) {
     console.log(inport, indata);
+    element.onload = function () {
+      return callback('showed', null, element.getAttribute('src'));
+    };
     element.setAttribute('src', indata);
-    return callback('showed', null, indata);
   };
   var client = new msgflo.mqtt.Client(broker, {});
   return new msgflo.participant.Participant(client, def, process, role);
