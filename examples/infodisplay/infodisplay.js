@@ -15,7 +15,7 @@ var DisplayParticipant = function (broker, role) {
     icon: 'television',
     inports: [
       {
-        id: 'show',
+        id: 'open',
         type: 'string'
       },
       {
@@ -25,7 +25,7 @@ var DisplayParticipant = function (broker, role) {
     ],
     outports: [
       {
-        id: 'showed',
+        id: 'opened',
         type: 'string'
       },
       {
@@ -42,12 +42,12 @@ var DisplayParticipant = function (broker, role) {
       return callback('urls', null, urls);
     }
     element.onload = function () {
-      return callback('showed', null, element.getAttribute('src'));
+      return callback('opened', null, element.getAttribute('src'));
     };
     element.setAttribute('src', indata);
     // Rotate internal URLs list
     setTimeout(function () {
-      participant.send('show', getRotationUrl());
+      participant.send('open', getRotationUrl());
     }, 120000);
   };
   var client = new msgflo.mqtt.Client(broker, {});
@@ -67,6 +67,6 @@ window.addEventListener('load', function () {
       return;
     }
     console.log('Started');
-    p.send('show', getRotationUrl());
+    p.send('open', getRotationUrl());
   });
 }, false);
