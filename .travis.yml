@@ -16,7 +16,7 @@ install:
 - npm install
 - npm run build
 before_script:
-- mosquitto -d
+- mosquitto -c spec/utils/mosquitto.conf -d
 - './node_modules/.bin/simple-server . &'
 script:
 - npm test
