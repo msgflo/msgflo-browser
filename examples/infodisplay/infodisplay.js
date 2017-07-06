@@ -3,6 +3,8 @@ var DisplayParticipant = function (broker, role) {
   var element = document.getElementById('iframe');
   var def = {
     component: 'msgflo-browser/infodisplay',
+    label: 'Browser-based information display',
+    icon: 'television',
     inports: [
       {
         id: 'show',
