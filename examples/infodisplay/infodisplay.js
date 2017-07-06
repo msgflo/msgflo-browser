@@ -17,7 +17,6 @@ var DisplayParticipant = function (broker, role) {
     ]
   };
   var process = function (inport, indata, callback) {
-    console.log(inport, indata);
     element.onload = function () {
       return callback('showed', null, element.getAttribute('src'));
     };
@@ -28,17 +27,10 @@ var DisplayParticipant = function (broker, role) {
 }
 
 window.addEventListener('load', function () {
-  var params = {
+  var params = msgflo.options({
     broker: 'mqtt://localhost',
     role: 'infodisplay'
-  }
-  if (window.location.search) {
-    window.location.search.substr(1).split('&').forEach(function (p) {
-      var split = p.split('=');
-      params[split[0]] = decodeURIComponent(split[1]);
-    });
-  }
-  console.log(params);
+  });
   var p = DisplayParticipant(params.broker, params.role);
   p.start(function (err) {
     if (err) {
