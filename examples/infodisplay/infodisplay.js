@@ -24,16 +24,30 @@ var DisplayParticipant = function (broker, role) {
       {
         id: 'show',
         type: 'string'
+      },
+      {
+        id: 'urls',
+        type: 'array'
       }
     ],
     outports: [
       {
         id: 'showed',
         type: 'string'
+      },
+      {
+        id: 'urls',
+        type: 'array',
+        hidden: true
       }
     ]
   };
   var process = function (inport, indata, callback) {
+    if (inport === 'urls') {
+      // Update URL listing
+      urls = indata;
+      return callback('urls', null, urls);
+    }
     element.onload = function () {
       return callback('showed', null, element.getAttribute('src'));
     };
