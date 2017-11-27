@@ -1,12 +1,16 @@
 var msgflo = window.msgflo;
 var timeout = null;
 
-var getRotationUrl = function (urls) {
-  return urls[Math.floor(Math.random() * urls.length)];
+var getRotationUrl = function (urls, current) {
+  var newUrl = urls[Math.floor(Math.random() * urls.length)];
+  if (newUrl === current && urls.length > 1) {
+    // Flip the coin again
+    return getRotationUrl(urls, current);
+  }
+  return newUrl;
 };
 
 var DisplayParticipant = function (broker, role, defaultUrls) {
-  var element = document.getElementById('iframe');
   var urls = defaultUrls;
   var def = {
     component: 'msgflo-browser/infodisplay',
@@ -35,22 +39,34 @@ var DisplayParticipant = function (broker, role, defaultUrls) {
     ]
   };
   var process = function (inport, indata, callback) {
+    var current = document.getElementById('current');
+    var next = document.getElementById('next');
     if (inport === 'urls') {
       // Update URL listing
       urls = indata;
       return callback('urls', null, urls);
     }
-    element.onload = function () {
-      return callback('opened', null, element.getAttribute('src'));
-    };
-    element.setAttribute('src', indata);
-    // Rotate internal URLs list
-    if (timeout) {
-      clearTimeout(timeout);
+    next.onerror = function (err) {
+      next.onload = null;
+      next.onerror = null;
+      participant.send('open', getRotationUrl(urls, indata));
     }
-    timeout = setTimeout(function () {
-      participant.send('open', getRotationUrl(urls));
-    }, 120000);
+    next.onload = function () {
+      next.onload = null;
+      next.onerror = null;
+      // Cross-fade
+      next.id = 'current';
+      current.id = 'next';
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(function () {
+        participant.send('open', getRotationUrl(urls, indata));
+      }, 5000);
+      return callback('opened', null, next.getAttribute('src'));
+    };
+    next.setAttribute('src', indata);
+    // Rotate internal URLs list
   };
   var client = new msgflo.mqtt.Client(broker, {});
   var participant = new msgflo.participant.Participant(client, def, process, role);
@@ -72,7 +88,6 @@ window.addEventListener('load', function () {
       console.error(err);
       return;
     }
-    console.log('Started');
     p.send('open', getRotationUrl(params.urls));
   });
 }, false);
