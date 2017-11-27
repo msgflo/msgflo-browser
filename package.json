@@ -12,7 +12,8 @@
   },
   "scripts": {
     "test": "fbp-spec --address ws://localhost:3569 --command './node_modules/.bin/msgflo --broker=mqtt://localhost' --start-timeout 60 spec/",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "start": "http-server . -p 5000"
   },
   "author": {
     "name": "Jon Nordby",
@@ -22,11 +23,11 @@
   "devDependencies": {
     "amqplib": "^0.5.1",
     "fbp-spec": "^0.2.1",
+    "http-server": "^0.10.0",
     "mqtt": "^2.9.1",
     "msgflo": "^0.11.0",
     "msgflo-nodejs": "^0.11.1",
     "phantom": "^4.0.4",
-    "simple-server": "^1.0.1",
     "webpack": "^2.2.1",
     "uuid": "^3.1.0"
   },
