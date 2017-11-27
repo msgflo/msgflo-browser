@@ -7,13 +7,7 @@ const uuid = require('uuid');
 
 class Client extends interfaces.MessagingClient {
   constructor(address, options) {
-    {
-      // Hack: trick Babel/TypeScript into allowing this before super.
-      if (false) { super(); }
-      let thisFn = (() => { this; }).toString();
-      let thisName = thisFn.slice(thisFn.indexOf('{') + 1, thisFn.indexOf(';')).trim();
-      eval(`${thisName} = this;`);
-    }
+    super(address, options);
     this._onConnectionLost = this._onConnectionLost.bind(this);
     this._onMessage = this._onMessage.bind(this);
     this.connect = this.connect.bind(this);
