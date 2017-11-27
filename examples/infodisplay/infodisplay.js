@@ -1,15 +1,13 @@
 var msgflo = window.msgflo;
-var urls = [
-    "https://msgflo.org",
-    "https://flowhub.io/iot/"
-];
-var getRotationUrl = function () {
-  return urls[Math.floor(Math.random() * urls.length)];
-};
 var timeout = null;
 
-var DisplayParticipant = function (broker, role) {
+var getRotationUrl = function (urls) {
+  return urls[Math.floor(Math.random() * urls.length)];
+};
+
+var DisplayParticipant = function (broker, role, defaultUrls) {
   var element = document.getElementById('iframe');
+  var urls = defaultUrls;
   var def = {
     component: 'msgflo-browser/infodisplay',
     label: 'Browser-based information display',
@@ -51,7 +49,7 @@ var DisplayParticipant = function (broker, role) {
       clearTimeout(timeout);
     }
     timeout = setTimeout(function () {
-      participant.send('open', getRotationUrl());
+      participant.send('open', getRotationUrl(urls));
     }, 120000);
   };
   var client = new msgflo.mqtt.Client(broker, {});
@@ -62,15 +60,19 @@ var DisplayParticipant = function (broker, role) {
 window.addEventListener('load', function () {
   var params = msgflo.options({
     broker: 'mqtt://localhost',
-    role: 'infodisplay'
+    role: 'infodisplay',
+    urls: [
+      "https://msgflo.org",
+      "https://flowhub.io/iot/"
+    ],
   });
-  var p = DisplayParticipant(params.broker, params.role);
+  var p = DisplayParticipant(params.broker, params.role, params.urls);
   p.start(function (err) {
     if (err) {
       console.error(err);
       return;
     }
     console.log('Started');
-    p.send('open', getRotationUrl());
+    p.send('open', getRotationUrl(params.urls));
   });
 }, false);
