@@ -13,7 +13,7 @@
   "scripts": {
     "test": "fbp-spec --address ws://localhost:3569 --command './node_modules/.bin/msgflo --broker=mqtt://localhost' --start-timeout 60 spec/",
     "build": "webpack --config webpack.config.js",
-    "start": "http-server . -p 5000"
+    "start": "http-server . -p 3000"
   },
   "author": {
     "name": "Jon Nordby",
@@ -27,9 +27,9 @@
     "mqtt": "^2.9.1",
     "msgflo": "^0.11.0",
     "msgflo-nodejs": "^0.11.1",
-    "phantom": "^4.0.4",
-    "webpack": "^2.2.1",
-    "uuid": "^3.1.0"
+    "puppeteer": "^0.13.0",
+    "uuid": "^3.1.0",
+    "webpack": "^2.2.1"
   },
   "dependencies": {
     "debug": "^2.6.0",
@@ -37,7 +37,7 @@
   },
   "msgflo": {
     "components": {
-      "msgflo-browser/infodisplay": "node ./node_modules/.bin/phantomjs spec/utils/phantom.js"
+      "msgflo-browser/infodisplay": "node spec/utils/chrome.js"
     }
   }
 }
