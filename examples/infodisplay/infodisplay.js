@@ -10,7 +10,7 @@ var getRotationUrl = function (urls, current) {
   return newUrl;
 };
 
-var DisplayParticipant = function (broker, role, defaultUrls) {
+var DisplayParticipant = function (broker, role, defaultUrls, timer) {
   var urls = defaultUrls;
   var def = {
     component: 'msgflo-browser/infodisplay',
@@ -62,7 +62,7 @@ var DisplayParticipant = function (broker, role, defaultUrls) {
       }
       timeout = setTimeout(function () {
         participant.send('open', getRotationUrl(urls, indata));
-      }, 5000);
+      }, timer);
       return callback('opened', null, next.getAttribute('src'));
     };
     next.setAttribute('src', indata);
@@ -81,8 +81,9 @@ window.addEventListener('load', function () {
       "https://msgflo.org",
       "https://flowhub.io/iot/"
     ],
+    timer: 120000,
   });
-  var p = DisplayParticipant(params.broker, params.role, params.urls);
+  var p = DisplayParticipant(params.broker, params.role, params.urls, params.timer);
   p.start(function (err) {
     if (err) {
       console.error(err);
