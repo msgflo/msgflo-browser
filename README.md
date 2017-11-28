@@ -14,3 +14,10 @@ Use NPM
 ## Usage
 
 See [examples](./examples)
+
+## Changes
+
+* 0.2.0 (November 28 2017)
+  - Ported from CoffeeScript to ES6
+  - Updated infodisplay example to use smoother transitions
+  - Switched tests from PhantomJS to Chrome Headless
