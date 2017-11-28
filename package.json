@@ -12,7 +12,8 @@
   },
   "scripts": {
     "test": "fbp-spec --address ws://localhost:3569 --command './node_modules/.bin/msgflo --broker=mqtt://localhost' --start-timeout 60 spec/",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "start": "http-server . -p 3000 -s"
   },
   "author": {
     "name": "Jon Nordby",
@@ -21,16 +22,14 @@
   "license": "MIT",
   "devDependencies": {
     "amqplib": "^0.5.1",
-    "coffee-loader": "^0.7.2",
-    "coffee-script": "^1.12.3",
     "fbp-spec": "^0.2.1",
+    "http-server": "^0.10.0",
     "mqtt": "^2.9.1",
-    "msgflo": "^0.10.27",
-    "msgflo-nodejs": "^0.9.1",
-    "phantom": "^4.0.4",
-    "simple-server": "^1.0.1",
-    "webpack": "^2.2.1",
-    "uuid": "^3.1.0"
+    "msgflo": "^0.11.0",
+    "msgflo-nodejs": "^0.11.1",
+    "puppeteer": "^0.13.0",
+    "uuid": "^3.1.0",
+    "webpack": "^2.2.1"
   },
   "dependencies": {
     "debug": "^2.6.0",
@@ -38,7 +37,7 @@
   },
   "msgflo": {
     "components": {
-      "msgflo-browser/infodisplay": "node ./node_modules/.bin/phantomjs spec/utils/phantom.js"
+      "msgflo-browser/infodisplay": "node spec/utils/chrome.js"
     }
   }
 }

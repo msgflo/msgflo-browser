@@ -1,15 +1,17 @@
 var msgflo = window.msgflo;
-var urls = [
-    "https://msgflo.org",
-    "https://flowhub.io/iot/"
-];
-var getRotationUrl = function () {
-  return urls[Math.floor(Math.random() * urls.length)];
-};
 var timeout = null;
 
-var DisplayParticipant = function (broker, role) {
-  var element = document.getElementById('iframe');
+var getRotationUrl = function (urls, current) {
+  var newUrl = urls[Math.floor(Math.random() * urls.length)];
+  if (newUrl === current && urls.length > 1) {
+    // Flip the coin again
+    return getRotationUrl(urls, current);
+  }
+  return newUrl;
+};
+
+var DisplayParticipant = function (broker, role, defaultUrls, timer) {
+  var urls = defaultUrls;
   var def = {
     component: 'msgflo-browser/infodisplay',
     label: 'Browser-based information display',
@@ -37,22 +39,34 @@ var DisplayParticipant = function (broker, role) {
     ]
   };
   var process = function (inport, indata, callback) {
+    var current = document.getElementById('current');
+    var next = document.getElementById('next');
     if (inport === 'urls') {
       // Update URL listing
       urls = indata;
       return callback('urls', null, urls);
     }
-    element.onload = function () {
-      return callback('opened', null, element.getAttribute('src'));
-    };
-    element.setAttribute('src', indata);
-    // Rotate internal URLs list
-    if (timeout) {
-      clearTimeout(timeout);
+    next.onerror = function (err) {
+      next.onload = null;
+      next.onerror = null;
+      participant.send('open', getRotationUrl(urls, indata));
     }
-    timeout = setTimeout(function () {
-      participant.send('open', getRotationUrl());
-    }, 120000);
+    next.onload = function () {
+      next.onload = null;
+      next.onerror = null;
+      // Cross-fade
+      next.id = 'current';
+      current.id = 'next';
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(function () {
+        participant.send('open', getRotationUrl(urls, indata));
+      }, timer);
+      return callback('opened', null, next.getAttribute('src'));
+    };
+    next.setAttribute('src', indata);
+    // Rotate internal URLs list
   };
   var client = new msgflo.mqtt.Client(broker, {});
   var participant = new msgflo.participant.Participant(client, def, process, role);
@@ -62,15 +76,19 @@ var DisplayParticipant = function (broker, role) {
 window.addEventListener('load', function () {
   var params = msgflo.options({
     broker: 'mqtt://localhost',
-    role: 'infodisplay'
+    role: 'infodisplay',
+    urls: [
+      "https://msgflo.org",
+      "https://flowhub.io/iot/"
+    ],
+    timer: 120000,
   });
-  var p = DisplayParticipant(params.broker, params.role);
+  var p = DisplayParticipant(params.broker, params.role, params.urls, params.timer);
   p.start(function (err) {
     if (err) {
       console.error(err);
       return;
     }
-    console.log('Started');
-    p.send('open', getRotationUrl());
+    p.send('open', getRotationUrl(params.urls));
   });
 }, false);

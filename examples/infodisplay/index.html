@@ -12,17 +12,27 @@
         background-color: #000000;
         overflow: hidden;
       }
-      #iframe {
+      iframe {
+        position: absolute;
+        top: 0px;
+        left: 0px;
         width: 100vw;
         height: 100vh;
         margin: 0px;
         padding: 0px;
         border: 0px;
         background-color: #000000;
+        transition: opacity 0.3s ease-in-out;
+        overflow: hidden;
+        opacity: 1;
+      }
+      iframe#next {
+        opacity: 0;
       }
     </style>
   </head>
   <body>
-    <iframe id="iframe"></iframe>
+    <iframe id="current"></iframe>
+    <iframe id="next"></iframe>
   </body>
 </html>

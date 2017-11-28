@@ -4,7 +4,7 @@ language: node_js
 services:
 - rabbitmq
 node_js:
-- stable
+- lts/*
 before_install:
 - sudo apt-get update -qq
 - sudo apt-get install pkg-config cmake openssl libc-ares-dev libwebsockets-dev
@@ -19,7 +19,7 @@ install:
 - npm run build
 before_script:
 - mosquitto -c spec/utils/mosquitto.conf -d
-- './node_modules/.bin/simple-server . &'
+- npm start &
 script:
 - npm test
 deploy:

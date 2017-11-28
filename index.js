@@ -18,6 +18,9 @@ module.exports = {
     for (var key in defaults) {
       var msgfloKey = 'msgflo_' + key
       if (params[msgfloKey]) {
+        if (Array.isArray(defaults[key]) && !Array.isArray(params[msgfloKey])) {
+          params[msgfloKey] = [params[msgfloKey]];
+        }
         options[key] = params[msgfloKey];
         continue;
       }
